@@ -13,8 +13,11 @@ import {MatSidenavModule} from '@angular/material/sidenav'
 import {MatCardModule} from '@angular/material/card'
 import {MatListModule} from '@angular/material/list';
 import { HomeComponent } from './views/home/home.component';
-import { NavComponent } from './components/template/nav/nav.component'
-
+import { NavComponent } from './components/template/nav/nav.component';
+import { UsuarioCrudComponent } from './views/usuario-crud/usuario-crud.component';
+import { UsuarioCreateComponent } from './components/usuario/usuario-create/usuario-create.component'
+import {MatButtonModule} from '@angular/material/button'
+import {MatSnackBarModule} from '@angular/material/snack-bar'
 
 @NgModule({
   declarations: [
@@ -22,7 +25,9 @@ import { NavComponent } from './components/template/nav/nav.component'
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    NavComponent
+    NavComponent,
+    UsuarioCrudComponent,
+    UsuarioCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,9 @@ import { NavComponent } from './components/template/nav/nav.component'
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatButtonModule,
+    MatSnackBarModule
 
   ],
   providers: [],
