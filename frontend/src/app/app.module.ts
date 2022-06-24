@@ -18,6 +18,16 @@ import { UsuarioCrudComponent } from './views/usuario-crud/usuario-crud.componen
 import { UsuarioCreateComponent } from './components/usuario/usuario-create/usuario-create.component'
 import {MatButtonModule} from '@angular/material/button'
 import {MatSnackBarModule} from '@angular/material/snack-bar'
+import {HttpClientModule} from '@angular/common/http'
+
+import {FormsModule} from '@angular/forms'
+import {MatFormFieldModule} from '@angular/material/form-field'
+import {MatInputModule} from '@angular/material/input';
+import { UsuarioReadComponent } from './components/usuario/usuario-read/usuario-read.component';
+import { UsuarioRead2Component } from './components/usuario/usuario-read2/usuario-read2.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort'
 
 @NgModule({
   declarations: [
@@ -27,7 +37,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar'
     HomeComponent,
     NavComponent,
     UsuarioCrudComponent,
-    UsuarioCreateComponent
+    UsuarioCreateComponent,
+    UsuarioReadComponent,
+    UsuarioRead2Component
   ],
   imports: [
     BrowserModule,
@@ -38,7 +50,14 @@ import {MatSnackBarModule} from '@angular/material/snack-bar'
     MatListModule,
     MatCardModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    HttpClientModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
 
   ],
   providers: [],

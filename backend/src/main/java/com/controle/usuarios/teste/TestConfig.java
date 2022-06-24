@@ -28,7 +28,7 @@ public class TestConfig implements CommandLineRunner {
 		Usuario user3 = new Usuario(null, "Efigenia", "efigenia@gmail.com", "62993112345", "9023467", "71232509144",
 				sdf.parse("15/04/1959"), "Inativo");
 		Usuario user4 = new Usuario(null, "Danielle", "danielle@gmail.com", "62993467234", "6098652", "10829637891",
-				sdf.parse("01/03/1984"), "Inativo");
+				sdf.parse("01/	03/1984"), "Inativo");
 		usuarioRepository.saveAll(Arrays.asList(user1, user2, user3, user4));
 
 	}

@@ -1,9 +1,43 @@
-<p>usuario-create works!</p>
+<mat-card>
+    <mat-card-title>
+        Novo Usuário
+    </mat-card-title>
+    <form >
+        <mat-form-field>
+            <input matInput placeholder="Nome"
+             [(ngModel)]="usuario.nome" name="nome"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="E-mail" 
+            [(ngModel)]="usuario.email" name="email"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Telefone" 
+            [(ngModel)]="usuario.telefone" name="telefone"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="CPF" 
+            [(ngModel)]="usuario.cpf" name="cpf"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="RG" 
+            [(ngModel)]="usuario.rg" name="rg"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Data de nascimento"
+            [(ngModel)]="usuario.dataNascimento" name="dataNascimento"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Situação" 
+            [(ngModel)]="usuario.situacao" name="situacao"> 
+        </mat-form-field>
+    </form>
+    <button mat-raised-button (click)="criar()" color="primary">
+        Salvar
+    </button>
+    
+    <button mat-raised-button (click)="cancelar()">
+        Cancelar
+    </button>
+</mat-card>
 
-<button mat-raised-button (click)="criar()" color="primary">
-    Salvar
-</button>
-
-<button mat-raised-button (click)="cancelar()">
-    Cancelar
-</button>

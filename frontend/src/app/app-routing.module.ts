@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from './views/home/home.component';
 import {UsuarioCrudComponent} from  './views/usuario-crud/usuario-crud.component'
 import { UsuarioCreateComponent } from './components/usuario/usuario-create/usuario-create.component';
+
 const routes: Routes = [
   {
   path: "",
