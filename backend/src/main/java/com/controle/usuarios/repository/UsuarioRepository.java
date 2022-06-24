@@ -18,4 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 	public List<Usuario> findByNome(String nome);
 
+	@Query("select u from Usuario u where u.id = :id")
+	public Usuario buscarPorId(Long id);
+
 }

@@ -27,4 +27,15 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.urlRed)
   }
 
+  buscarPeloId(id: string):Observable<Usuario> {
+    const url = `${this.baseUrl}/${id}`
+    return this.http.get<Usuario>(url)
+
+  }
+  atualizar(usuario: Usuario):Observable<Usuario> {
+    const url = `${this.baseUrl}/${usuario.id}`
+    return this.http.put<Usuario>(url,usuario)
+
+  }
+
 }

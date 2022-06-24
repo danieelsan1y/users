@@ -1,3 +1,4 @@
+import { UsuarioUpdateComponent } from './components/usuario/usuario-update/usuario-update.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -17,6 +18,10 @@ const routes: Routes = [
 {
   path: "usuarios/create",
   component: UsuarioCreateComponent
+},
+{
+  path: "usuarios/update/:id",
+  component: UsuarioUpdateComponent
 }
 ];
 

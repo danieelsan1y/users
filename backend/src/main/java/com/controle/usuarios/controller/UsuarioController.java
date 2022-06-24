@@ -28,6 +28,17 @@ public class UsuarioController {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@GetMapping (value = "{id}")
+	ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
+		UsuarioDTO usuarioDTO = service.buscarPorId(id);
+		return ResponseEntity.ok().body(usuarioDTO);
+	}
+	@PutMapping(value = "/{id}")
+	ResponseEntity<Void> alterarUsuario(@RequestBody UsuarioDTO usuarioDTO, @PathVariable Long id) {
+		service.atualizarPorId(usuarioDTO, id);
+		return ResponseEntity.noContent().build();
+	}
+
 	@PutMapping(value = "situacao/{cpf}")
 	ResponseEntity<Void> alterarSituacao(@PathVariable String cpf, @RequestBody UsuarioDTO dtousuario) {
 		dtousuario.setCpf(cpf);
@@ -54,7 +65,7 @@ public class UsuarioController {
 
 		return ResponseEntity.ok().body(usuariosDTO);
 	}
-
+/*
 	@DeleteMapping(value = "/{cpf}")
 	ResponseEntity<Void> deletarUsuario(@PathVariable String cpf) {
 		service.deletar(cpf);
@@ -66,4 +77,6 @@ public class UsuarioController {
 		service.atualizar(usuarioDTO, cpf);
 		return ResponseEntity.noContent().build();
 	}
+
+ */
 }

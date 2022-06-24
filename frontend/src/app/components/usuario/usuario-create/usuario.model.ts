@@ -8,4 +8,5 @@ export interface Usuario {
     dataNascimento? : string;
     situacao : string;
     idade? : number;
+    
 }
