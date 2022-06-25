@@ -3,15 +3,16 @@ package com.controle.usuarios.controller;
 import java.net.URI;
 import java.util.List;
 
+import com.controle.usuarios.dto.UsuarioDTO;
+import com.controle.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.controle.usuarios.dto.UsuarioDTO;
-import com.controle.usuarios.model.Usuario;
-import com.controle.usuarios.service.UsuarioService;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/usuarios")
@@ -22,7 +23,7 @@ public class UsuarioController {
 	UsuarioService service;
 
 	@PostMapping
-	ResponseEntity<Void> salvar(@RequestBody UsuarioDTO usuarioDTO) {
+	ResponseEntity<Void> salvar(@Valid @RequestBody UsuarioDTO usuarioDTO) {
 		UsuarioDTO user = service.salvar(usuarioDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(uri).build();

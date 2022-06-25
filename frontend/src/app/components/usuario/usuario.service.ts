@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class UsuarioService {
   baseUrl = "http://localhost:8080/usuarios"
   urlRed = "http://localhost:8080/usuarios/status/Ativo"
+  urlDisable ="http://localhost:8080/usuarios/situacao"
 
   constructor(private snackBar: MatSnackBar, private http: HttpClient) { }
 
@@ -35,7 +36,10 @@ export class UsuarioService {
   atualizar(usuario: Usuario):Observable<Usuario> {
     const url = `${this.baseUrl}/${usuario.id}`
     return this.http.put<Usuario>(url,usuario)
-
   }
-
+  desabilitar(usuario: Usuario):Observable<Usuario> {
+    const url = `${this.urlDisable}/${usuario.id}`
+    usuario.situacao = 'Inativo'
+    return this.http.put<Usuario>(url,usuario)
+  }
 }

@@ -26,9 +26,10 @@ export class UsuarioUpdateComponent implements OnInit {
   atualizar(): void {
     this.usuarioService.atualizar(this.usuario).subscribe(()=>{
       if(this.usuario.situacao == 'Inativo') {
-        this.usuarioService.exibirMensagem('Produto desativado com sucesso! ')
+        this.usuarioService.exibirMensagem('Usuário desabilitado com sucesso! ')
+        this.router.navigate(['/usuarios'])
       } else {
-        this.usuarioService.exibirMensagem('Produto atualizado com sucesso! ')
+        this.usuarioService.exibirMensagem('Usuário desabilitado com sucesso! ')
         this.router.navigate(['/usuarios'])
       }
 

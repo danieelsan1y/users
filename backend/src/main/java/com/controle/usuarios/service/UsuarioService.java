@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.controle.usuarios.dto.UsuarioDTO;
+import com.controle.usuarios.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.controle.usuarios.dto.UsuarioDTO;
 import com.controle.usuarios.model.Usuario;
-import com.controle.usuarios.repository.UsuarioRepository;
 import com.controle.usuarios.service.exceptions.ServiceException;
+
+import javax.validation.Valid;
 
 @Service
 public class UsuarioService {
@@ -19,7 +21,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
-    public UsuarioDTO salvar(UsuarioDTO userDTO) {
+    public UsuarioDTO salvar(@Valid UsuarioDTO userDTO) {
         Usuario user = converterParaUsuario(userDTO);
         if (validarEmail(user)) {
             retirarMascaraEmail(user);

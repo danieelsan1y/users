@@ -7,6 +7,6 @@ export interface Usuario {
     rg?: string
     dataNascimento? : string;
     situacao?: string;
-    idade? : number;
+    idade?: number;
     
 }

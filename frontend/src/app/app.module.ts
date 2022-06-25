@@ -28,7 +28,8 @@ import { UsuarioRead2Component } from './components/usuario/usuario-read2/usuari
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { UsuarioUpdateComponent } from './components/usuario/usuario-update/usuario-update.component'
+import { UsuarioUpdateComponent } from './components/usuario/usuario-update/usuario-update.component';
+import { UsuarioDisableComponent } from './components/usuario/usuario-disable/usuario-disable.component'
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UsuarioUpdateComponent } from './components/usuario/usuario-update/usua
     UsuarioCreateComponent,
     UsuarioReadComponent,
     UsuarioRead2Component,
-    UsuarioUpdateComponent
+    UsuarioUpdateComponent,
+    UsuarioDisableComponent
   ],
   imports: [
     BrowserModule,
