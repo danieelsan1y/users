@@ -27,10 +27,6 @@
             <input matInput placeholder="Data de nascimento"
             [(ngModel)]="usuario.dataNascimento" name="dataNascimento"> 
         </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Situação" 
-            [(ngModel)]="usuario.situacao" name="situacao"> 
-        </mat-form-field>
     </form>
     <button mat-raised-button (click)="criar()" color="primary">
         Salvar

@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 
 import com.controle.usuarios.dto.UsuarioDTO;
 import com.controle.usuarios.repository.UsuarioRepository;
+import com.controle.usuarios.service.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.controle.usuarios.model.Usuario;
-import com.controle.usuarios.service.exceptions.ServiceException;
 
 import javax.validation.Valid;
 
@@ -21,18 +21,38 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
-    public UsuarioDTO salvar(@Valid UsuarioDTO userDTO) {
-        Usuario user = converterParaUsuario(userDTO);
-        if (validarEmail(user)) {
-            retirarMascaraEmail(user);
-            retirarMascaraTelefone(user);
-            repository.save(user);
+
+    public UsuarioDTO salvar(@Valid UsuarioDTO usuarioDTO) {
+        validarUsuarioDTO(usuarioDTO);
+        Usuario novoUsuario = converterParaUsuario(usuarioDTO);
+        retirarMascaraCpf(novoUsuario);
+        retirarMascaraTelefone(novoUsuario);
+        validarUsuario(novoUsuario);
+        Usuario usuario = repository.encontrarPorCpf(novoUsuario.getCpf());
+        if (verificarSeUsuarioExisteNoBanco(usuario)) {
+            if (usuario.getSituacao().equals("Inativo")) {
+                inserirNosCampos(usuario,usuarioDTO);
+                return new UsuarioDTO(usuario);
+            } else {
+                throw new ServiceException("Usuário já cadastrado no banco!");
+            }
         } else {
-            throw new ServiceException(user.getEmail());
+            repository.save(novoUsuario);
+            return new UsuarioDTO(novoUsuario);
         }
-        return new UsuarioDTO(user);
     }
 
+    public void inserirNosCampos(Usuario usuario, UsuarioDTO usuarioDTO){
+        retirarMascaraCpf(usuario);
+        retirarMascaraTelefone(usuario);
+        usuario.setSituacao("Ativo");
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setDataNascimento(usuarioDTO.getDataNascimento());
+        usuario.setTelefone(usuario.getTelefone());
+        usuario.setRg(usuarioDTO.getRg());
+        usuario.setNome(usuarioDTO.getNome());
+        repository.save(usuario);
+    }
     public void deletar(String cpf) {
         Usuario user = repository.encontrarPorCpf(cpf);
         repository.deleteById(user.getId());
@@ -44,49 +64,34 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public UsuarioDTO atualizar(UsuarioDTO user, String cpf) {
-        Usuario usuarioAntigo = repository.encontrarPorCpf(cpf);
-        Usuario usuarioNovo = converterParaUsuario(user);
-        atualizarCampos(usuarioNovo, usuarioAntigo);
-        System.out.println(usuarioAntigo);
 
-        if (validarEmail(usuarioAntigo)) {
-            retirarMascaraEmail(usuarioAntigo);
-            retirarMascaraTelefone(usuarioAntigo);
-            repository.save(usuarioAntigo);
-        }
-
-        return new UsuarioDTO(usuarioAntigo);
-    }
     public UsuarioDTO atualizarPorId(UsuarioDTO user, Long id) {
         Usuario usuarioAntigo = repository.buscarPorId(id);
         Usuario usuarioNovo = converterParaUsuario(user);
         atualizarCampos(usuarioNovo, usuarioAntigo);
+        retirarMascaraCpf(usuarioAntigo);
+        retirarMascaraTelefone(usuarioAntigo);
+        validarUsuario(usuarioAntigo);
+        repository.save(usuarioAntigo);
 
-        if (validarEmail(usuarioAntigo)) {
-            retirarMascaraEmail(usuarioAntigo);
-            retirarMascaraTelefone(usuarioAntigo);
-            repository.save(usuarioAntigo);
-        }
 
         return new UsuarioDTO(usuarioAntigo);
     }
 
-    public Usuario alterarSituacao(UsuarioDTO userDTO) {
-        Usuario user = converterParaUsuario(userDTO);
-        Usuario newUser = repository.encontrarPorCpf(user.getCpf());
+    public Usuario alterarSituacao(Long id, UsuarioDTO userDTO) {
+        Usuario novoUsuario = converterParaUsuario(userDTO);
+        Usuario newUser = repository.buscarPorId(id);
+        newUser.setSituacao(novoUsuario.getSituacao());
+        repository.save(novoUsuario);
 
-        newUser.setSituacao(user.getSituacao());
-        repository.save(newUser);
-
-        return user;
+        return novoUsuario;
     }
 
     public List<UsuarioDTO> buscarStatus(String status) {
         List<Usuario> usuarios = repository.buscarStatusUsuario(status);
         for (Usuario user : usuarios) {
             colocarMascaraTelefone(user);
-            colocarMascaraEmail(user);
+            colocarMascaraCpf(user);
         }
 
         List<UsuarioDTO> usuariosDTO = usuarios.stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
@@ -108,28 +113,8 @@ public class UsuarioService {
         return user;
     }
 
-    private boolean validarEmail(Usuario user) {
-        int validacao = 0;
 
-        if (user.getEmail().length() > 2) {
-            for (int i = 0; i < user.getEmail().length(); i++) {
-                if (user.getEmail().charAt(i) == '@') {
-                    validacao++;
-                }
-                if (user.getEmail().charAt(i) == '.') {
-                    validacao++;
-                }
-            }
-        }
-
-        if (validacao == 2) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void retirarMascaraEmail(Usuario user) {
+    private void retirarMascaraCpf(Usuario user) {
 
         String cpfnovo = user.getCpf();
         cpfnovo = cpfnovo.replaceAll("\\.", "");
@@ -138,7 +123,7 @@ public class UsuarioService {
 
     }
 
-    private void colocarMascaraEmail(Usuario user) {
+    private void colocarMascaraCpf(Usuario user) {
 
         StringBuilder cpfnovo = new StringBuilder(user.getCpf());
         cpfnovo = cpfnovo.insert(3, ".");
@@ -151,11 +136,12 @@ public class UsuarioService {
 
     private void retirarMascaraTelefone(Usuario user) {
 
-        StringBuilder telNovo = new StringBuilder(user.getTelefone());
-        telNovo = telNovo.deleteCharAt(0);
-        telNovo = telNovo.deleteCharAt(2);
-        telNovo = telNovo.deleteCharAt(7);
-        user.setTelefone(telNovo.toString());
+        String telNovo = user.getTelefone();
+
+        telNovo = telNovo.replaceAll("\\(", "");
+        telNovo = telNovo.replaceAll("\\)", "");
+        telNovo = telNovo.replaceAll("-", "");
+        user.setTelefone(telNovo);
 
     }
 
@@ -191,4 +177,25 @@ public class UsuarioService {
         antigo.setTelefone(novo.getTelefone());
     }
 
+    private boolean verificarSeUsuarioExisteNoBanco(Usuario usuario) {
+        if (usuario != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private void validarUsuarioDTO(UsuarioDTO usuarioDTO) {
+        Validate.validarData(usuarioDTO);
+        Validate.validarSeDataTemLetra(usuarioDTO);
+    }
+    private void validarUsuario(Usuario usuario) {
+        Validate.validarTelefone(usuario);
+        Validate.validarSituacao(usuario);
+        Validate.validarCpf(usuario);
+        Validate.validarEmail(usuario);
+
+        Validate.validarSeTelefoneTemLetras(usuario);
+        Validate.validarSeCpfTemLetra(usuario);
+        Validate.validarSeRgTemLetras(usuario);
+    }
 }

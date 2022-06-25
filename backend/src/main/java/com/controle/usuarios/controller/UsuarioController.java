@@ -40,10 +40,9 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping(value = "situacao/{cpf}")
-	ResponseEntity<Void> alterarSituacao(@PathVariable String cpf, @RequestBody UsuarioDTO dtousuario) {
-		dtousuario.setCpf(cpf);
-		service.alterarSituacao(dtousuario);
+	@PutMapping(value = "situacao/{id}")
+	ResponseEntity<Void> alterarSituacao(@PathVariable Long id, @RequestBody UsuarioDTO dtousuario) {
+		service.alterarSituacao(id,dtousuario);
 		return ResponseEntity.noContent().build();
 	}
 
