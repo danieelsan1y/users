@@ -13,7 +13,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	@Query("select u from Usuario u where u.cpf = :cpf")
 	public Usuario encontrarPorCpf(@Param("cpf") String cpf);
 
-	@Query("select u from Usuario u where u.situacao = :situacao")
+	@Query("select u from Usuario u where u.situacao = :situacao ORDER BY u.id ASC")
 	public List<Usuario> buscarStatusUsuario(@Param("situacao") String situacao);
 
 	public List<Usuario> findByNome(String nome);

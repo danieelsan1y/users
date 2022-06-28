@@ -7,3 +7,8 @@ button {
     margin-top: 20px;
     margin-right: 15px;
 }
+
+#date::after {
+    text-align: left;
+    content: "teste";
+}
