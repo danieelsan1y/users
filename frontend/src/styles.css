@@ -6,3 +6,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .red {
     color: rgb(227, 94,107);
 }
+
+.msg-sucess {
+    background-color: #28a745;
+    color: white;
+}
+
+.msg-error {
+    background-color: #ff0000;
+    color: black;
+}

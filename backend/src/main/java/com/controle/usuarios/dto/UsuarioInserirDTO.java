@@ -1,5 +1,10 @@
 package com.controle.usuarios.dto;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Date;
 import com.controle.usuarios.model.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
@@ -7,18 +12,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 
-public class UsuarioDTO implements Serializable {
+public class UsuarioInserirDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -27,12 +26,12 @@ public class UsuarioDTO implements Serializable {
 	private String telefone;
 	private String rg;
 	private String cpf;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/mm/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
 	private Date dataNascimento;
 	private String situacao;
 	private Integer idade;
 
-	public UsuarioDTO(Usuario user) {
+	public UsuarioInserirDTO(Usuario user) {
 		this.cpf = user.getCpf();
 		this.id = user.getId();
 		this.nome = user.getNome();

@@ -1,6 +1,6 @@
 package com.controle.usuarios.service;
 
-import com.controle.usuarios.dto.UsuarioDTO;
+import com.controle.usuarios.dto.UsuarioInserirDTO;
 import com.controle.usuarios.model.Usuario;
 import com.controle.usuarios.service.exceptions.ServiceException;
 
@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 public class Validate {
 
@@ -30,15 +29,20 @@ public class Validate {
         }
     }
 
-    public static void validarData(UsuarioDTO usuario) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        String data = sdf.format(usuario.getDataNascimento());
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate d = LocalDate.parse(data, formatter);
-        } catch (DateTimeParseException e) {
-            throw new ServiceException("Data Inválida");
+    public static void validarData(UsuarioInserirDTO usuario) {
+        if(usuario.getDataNascimento() !=null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+            String data = sdf.format(usuario.getDataNascimento());
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate d = LocalDate.parse(data, formatter);
+            } catch (DateTimeParseException e) {
+                throw new ServiceException("Data Inválida, insira novamente");
+            }
+        } else  {
+            throw new ServiceException("A Data não pode ser vazia!");
         }
+
     }
 
     public static void validarEmail(Usuario usuario) {
@@ -67,7 +71,7 @@ public class Validate {
         }
     }
 
-    public static void validarSeDataTemLetra(UsuarioDTO usuario) {
+    public static void validarSeDataTemLetra(UsuarioInserirDTO usuario) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
         String data = sdf.format(usuario.getDataNascimento());
         data = data.replaceAll("/", "");

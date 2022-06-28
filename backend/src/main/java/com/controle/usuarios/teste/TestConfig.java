@@ -21,7 +21,7 @@ public class TestConfig implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Usuario user1 = new Usuario(null, "Daniel", "daniel@gmail.com", "6299317-5820", "6283063", "70342955144",
+		Usuario user1 = new Usuario(null, "Daniel", "daniel@gmail.com", "62993175820", "6283063", "70342955144",
 				sdf.parse("07/03/1999"), "Ativo");
 		Usuario user2 = new Usuario(null, "Daniel", "danillo@gmail.com", "62992417980", "6700124", "81349700100",
 				sdf.parse("01/03/1987"), "Ativo");

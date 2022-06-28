@@ -5,3 +5,7 @@ table {
 .edit > i{
     color: #d9cd26;
 }
+
+.disable {
+    color: red;
+}

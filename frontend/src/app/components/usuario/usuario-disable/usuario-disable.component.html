@@ -2,9 +2,35 @@
     <mat-card-title>
         Desabilitar Usuário
     </mat-card-title>
+    <form >
+        <mat-form-field>
+            <input matInput placeholder="Nome"
+             [(ngModel)]="usuario.nome" name="nome"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="E-mail" 
+            [(ngModel)]="usuario.email" name="email"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Telefone" 
+            [(ngModel)]="usuario.telefone" name="telefone"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="CPF" 
+            [(ngModel)]="usuario.cpf" name="cpf"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="RG" 
+            [(ngModel)]="usuario.rg" name="rg"> 
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Data de nascimento"
+            [(ngModel)]="usuario.dataNascimento" name="dataNascimento"> 
+        </mat-form-field>
+    </form>
 </mat-card>
 <div>
-    <mat-card-subtitle class="texto">Deseja desabilitar o usuário?</mat-card-subtitle>
+    <mat-card-subtitle class="texto">Deseja desabilitar o usuário {{usuario.nome}} ? </mat-card-subtitle>
     <button mat-raised-button (click)="desabilitar()" color="primary" class="sim">
        Sim
     </button>

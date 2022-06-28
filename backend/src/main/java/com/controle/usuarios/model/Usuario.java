@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +35,7 @@ public @Data class Usuario implements Serializable {
 	private String nome;
 
 	@NotEmpty(message = "O campo e-mail não pode ser vazio, insira novamente!")
-	@Column(name = "email_usuario",length = 20)
+	@Column(name = "email_usuario",length = 40)
 	private String email;
 
 	@NotEmpty(message = "O campo telefone não pode ser vazio, insira novamente!")
@@ -49,6 +50,7 @@ public @Data class Usuario implements Serializable {
 	@Column(name = "cpf_usuario",length = 14)
 	private String cpf;
 
+	@NotNull(message = "A data não pode ser vazia, insira novamente!")
 	@Column(name = "data_nascimento_usuario",length = 9)
 	private Date dataNascimento;
 

@@ -3,6 +3,7 @@ package com.controle.usuarios.controller;
 import java.net.URI;
 import java.util.List;
 
+import com.controle.usuarios.dto.UsuarioInserirDTO;
 import com.controle.usuarios.dto.UsuarioDTO;
 import com.controle.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,16 @@ public class UsuarioController {
 	UsuarioService service;
 
 	@PostMapping
-	ResponseEntity<Void> salvar(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-		UsuarioDTO user = service.salvar(usuarioDTO);
+	ResponseEntity<Void> salvar(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+		UsuarioInserirDTO user = service.salvar(usuarioInserirDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
 	@GetMapping (value = "{id}")
 	ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
-		UsuarioDTO usuarioDTO = service.buscarPorId(id);
-		return ResponseEntity.ok().body(usuarioDTO);
+		UsuarioDTO usuarioDateDTO = service.buscarPorId(id);
+		return ResponseEntity.ok().body(usuarioDateDTO);
 	}
 	@PutMapping(value = "/{id}")
 	ResponseEntity<Void> alterarUsuario(@RequestBody UsuarioDTO usuarioDTO, @PathVariable Long id) {
@@ -41,27 +42,27 @@ public class UsuarioController {
 	}
 
 	@PutMapping(value = "situacao/{id}")
-	ResponseEntity<Void> alterarSituacao(@PathVariable Long id, @RequestBody UsuarioDTO dtousuario) {
-		service.alterarSituacao(id,dtousuario);
+	ResponseEntity<Void> alterarSituacao(@PathVariable Long id, @RequestBody String situacao) {
+		service.alterarSituacao(id,situacao);
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping(value = "status/{status}")
-	ResponseEntity<List<UsuarioDTO>> buscarStatus(@PathVariable String status) {
-		List<UsuarioDTO> usuariosDTO = service.buscarStatus(status);
-		return ResponseEntity.ok().body(usuariosDTO);
+	@GetMapping(value = "situacao/{situacao}")
+	ResponseEntity<List<UsuarioDTO>> buscarStatus(@PathVariable String situacao) {
+		List<UsuarioDTO> usuariosDateDTO = service.buscarSituacao(situacao);
+		return ResponseEntity.ok().body(usuariosDateDTO);
 	}
 
 	@GetMapping(value = "nome/{nome}")
-	ResponseEntity<List<UsuarioDTO>> buscarPorNome(@PathVariable String nome) {
-		List<UsuarioDTO> usuariosDTO = service.buscarPorNome(nome);
+	ResponseEntity<List<UsuarioInserirDTO>> buscarPorNome(@PathVariable String nome) {
+		List<UsuarioInserirDTO> usuariosDTO = service.buscarPorNome(nome);
 		return ResponseEntity.ok().body(usuariosDTO);
 	}
 
 	@GetMapping(value = "idade/{idade}")
-	ResponseEntity<List<UsuarioDTO>> buscarPorIdade(@PathVariable Integer idade) {
+	ResponseEntity<List<UsuarioInserirDTO>> buscarPorIdade(@PathVariable Integer idade) {
 		System.out.println(idade);
-		List<UsuarioDTO> usuariosDTO = service.buscarPorIdade(idade);
+		List<UsuarioInserirDTO> usuariosDTO = service.buscarPorIdade(idade);
 
 		return ResponseEntity.ok().body(usuariosDTO);
 	}

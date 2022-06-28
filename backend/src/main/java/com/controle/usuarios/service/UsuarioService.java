@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.controle.usuarios.dto.UsuarioInserirDTO;
 import com.controle.usuarios.dto.UsuarioDTO;
 import com.controle.usuarios.repository.UsuarioRepository;
 import com.controle.usuarios.service.exceptions.ServiceException;
@@ -22,35 +23,35 @@ public class UsuarioService {
     private UsuarioRepository repository;
 
 
-    public UsuarioDTO salvar(@Valid UsuarioDTO usuarioDTO) {
-        validarUsuarioDTO(usuarioDTO);
-        Usuario novoUsuario = converterParaUsuario(usuarioDTO);
+    public UsuarioInserirDTO salvar(@Valid UsuarioInserirDTO usuarioInserirDTO) {
+        validarUsuarioDTO(usuarioInserirDTO);
+        Usuario novoUsuario = converterParaUsuario(usuarioInserirDTO);
         retirarMascaraCpf(novoUsuario);
         retirarMascaraTelefone(novoUsuario);
         validarUsuario(novoUsuario);
         Usuario usuario = repository.encontrarPorCpf(novoUsuario.getCpf());
         if (verificarSeUsuarioExisteNoBanco(usuario)) {
             if (usuario.getSituacao().equals("Inativo")) {
-                inserirNosCampos(usuario,usuarioDTO);
-                return new UsuarioDTO(usuario);
+                inserirNosCampos(usuario, usuarioInserirDTO);
+                return new UsuarioInserirDTO(usuario);
             } else {
                 throw new ServiceException("Usuário já cadastrado no banco!");
             }
         } else {
             repository.save(novoUsuario);
-            return new UsuarioDTO(novoUsuario);
+            return new UsuarioInserirDTO(novoUsuario);
         }
     }
 
-    public void inserirNosCampos(Usuario usuario, UsuarioDTO usuarioDTO){
+    public void inserirNosCampos(Usuario usuario, UsuarioInserirDTO usuarioInserirDTO){
         retirarMascaraCpf(usuario);
         retirarMascaraTelefone(usuario);
         usuario.setSituacao("Ativo");
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setDataNascimento(usuarioDTO.getDataNascimento());
+        usuario.setEmail(usuarioInserirDTO.getEmail());
+        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
         usuario.setTelefone(usuario.getTelefone());
-        usuario.setRg(usuarioDTO.getRg());
-        usuario.setNome(usuarioDTO.getNome());
+        usuario.setRg(usuarioInserirDTO.getRg());
+        usuario.setNome(usuarioInserirDTO.getNome());
         repository.save(usuario);
     }
     public void deletar(String cpf) {
@@ -60,14 +61,14 @@ public class UsuarioService {
 
     public UsuarioDTO buscarPorId(Long id) {
         Usuario usuario = repository.buscarPorId(id);
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        return usuarioDTO;
+        UsuarioDTO usuarioDateDTO = new UsuarioDTO(usuario);
+        return usuarioDateDTO;
     }
 
 
-    public UsuarioDTO atualizarPorId(UsuarioDTO user, Long id) {
+    public UsuarioDTO atualizarPorId(UsuarioDTO usuario, Long id) {
         Usuario usuarioAntigo = repository.buscarPorId(id);
-        Usuario usuarioNovo = converterParaUsuario(user);
+        Usuario usuarioNovo = converterUsuarioDTOParaUsuario(usuario);
         atualizarCampos(usuarioNovo, usuarioAntigo);
         retirarMascaraCpf(usuarioAntigo);
         retirarMascaraTelefone(usuarioAntigo);
@@ -78,41 +79,42 @@ public class UsuarioService {
         return new UsuarioDTO(usuarioAntigo);
     }
 
-    public Usuario alterarSituacao(Long id, UsuarioDTO userDTO) {
-        Usuario novoUsuario = converterParaUsuario(userDTO);
-        Usuario newUser = repository.buscarPorId(id);
-        newUser.setSituacao(novoUsuario.getSituacao());
+    public void alterarSituacao(Long id, String situacao) {
+        Usuario novoUsuario = repository.buscarPorId(id);
+        novoUsuario.setSituacao(situacao);
         repository.save(novoUsuario);
-
-        return novoUsuario;
     }
 
-    public List<UsuarioDTO> buscarStatus(String status) {
-        List<Usuario> usuarios = repository.buscarStatusUsuario(status);
+    public List<UsuarioDTO> buscarSituacao(String situacao) {
+        List<Usuario> usuarios = repository.buscarStatusUsuario(situacao);
         for (Usuario user : usuarios) {
             colocarMascaraTelefone(user);
             colocarMascaraCpf(user);
         }
 
-        List<UsuarioDTO> usuariosDTO = usuarios.stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
+        List<UsuarioDTO> usuariosDateDTO = usuarios.stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
 
 
-        return usuariosDTO;
+        return usuariosDateDTO;
     }
 
-    public List<UsuarioDTO> buscarPorNome(String nome) {
+    public List<UsuarioInserirDTO> buscarPorNome(String nome) {
         List<Usuario> usuarios = repository.findByNome(nome);
-        List<UsuarioDTO> usuariosDTO = usuarios.stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
+        List<UsuarioInserirDTO> usuariosDTO = usuarios.stream().map(x -> new UsuarioInserirDTO(x)).collect(Collectors.toList());
         return usuariosDTO;
 
     }
 
-    public Usuario converterParaUsuario(UsuarioDTO objDTO) {
+    public Usuario converterParaUsuario(UsuarioInserirDTO objDTO) {
         Usuario user = new Usuario(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getTelefone(),
                 objDTO.getRg(), objDTO.getCpf(), objDTO.getDataNascimento(), objDTO.getSituacao());
         return user;
     }
-
+    public Usuario converterUsuarioDTOParaUsuario(UsuarioDTO objDTO) {
+        Usuario user = new Usuario(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getTelefone(),
+                objDTO.getRg(), objDTO.getCpf(), objDTO.getDataNascimento(), objDTO.getSituacao());
+        return user;
+    }
 
     private void retirarMascaraCpf(Usuario user) {
 
@@ -154,12 +156,12 @@ public class UsuarioService {
         user.setTelefone(telNovo.toString());
     }
 
-    public List<UsuarioDTO> buscarPorIdade(Integer idade) {
-        List<UsuarioDTO> todosUsuariosDTO = repository.findAll().stream().map(x -> new UsuarioDTO(x))
+    public List<UsuarioInserirDTO> buscarPorIdade(Integer idade) {
+        List<UsuarioInserirDTO> todosUsuariosDTO = repository.findAll().stream().map(x -> new UsuarioInserirDTO(x))
                 .collect(Collectors.toList());
-        List<UsuarioDTO> usuariosComIdade = new ArrayList<>();
+        List<UsuarioInserirDTO> usuariosComIdade = new ArrayList<>();
 
-        for (UsuarioDTO user : todosUsuariosDTO) {
+        for (UsuarioInserirDTO user : todosUsuariosDTO) {
             if (user.getIdade() == idade) {
                 usuariosComIdade.add(user);
             }
@@ -184,9 +186,9 @@ public class UsuarioService {
         return false;
     }
 
-    private void validarUsuarioDTO(UsuarioDTO usuarioDTO) {
-        Validate.validarData(usuarioDTO);
-        Validate.validarSeDataTemLetra(usuarioDTO);
+    private void validarUsuarioDTO(UsuarioInserirDTO usuarioInserirDTO) {
+        Validate.validarData(usuarioInserirDTO);
+        Validate.validarSeDataTemLetra(usuarioInserirDTO);
     }
     private void validarUsuario(Usuario usuario) {
         Validate.validarTelefone(usuario);

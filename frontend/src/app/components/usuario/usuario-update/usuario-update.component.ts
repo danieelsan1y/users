@@ -29,7 +29,7 @@ export class UsuarioUpdateComponent implements OnInit {
         this.usuarioService.exibirMensagem('Usuário desabilitado com sucesso! ')
         this.router.navigate(['/usuarios'])
       } else {
-        this.usuarioService.exibirMensagem('Usuário desabilitado com sucesso! ')
+        this.usuarioService.exibirMensagem('Usuário Atualizado com sucesso! ')
         this.router.navigate(['/usuarios'])
       }
 
