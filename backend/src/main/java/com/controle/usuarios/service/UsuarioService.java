@@ -61,6 +61,8 @@ public class UsuarioService {
 
     public UsuarioDTO buscarPorId(Long id) {
         Usuario usuario = repository.buscarPorId(id);
+        colocarMascaraCpf(usuario);
+        colocarMascaraTelefone(usuario);
         UsuarioDTO usuarioDateDTO = new UsuarioDTO(usuario);
         return usuarioDateDTO;
     }
